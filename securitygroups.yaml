@@ -1,0 +1,67 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Plantilla Basica Grupos de Seguridad
+
+Resources:
+  SSHSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Trafico SSH
+      GroupName: SSHSecurityGroup
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+  HTTPSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Trafico HTTP
+      GroupName: HTTPSecurityGroup #Valor como id del grupo
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+  TomcatSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties: 
+      GroupDescription: Trafico en puerto 80
+      GroupName: TomcatSecurityGroup
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          CidrIp: 0.0.0.0/0
+          
+  MySQLSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Trafico en puerto 3306
+      GroupName: MySQLSecurityGroup
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+          CidrIp: 0.0.0.0/0
+          
+Outputs:
+  SSHSecurityGroupId:
+    Description: ID grupo de seguridad SSH
+    Value: !Ref SSHSecurityGroup # Le paso por referencia el valor del recurso
+    Export:
+      Name: !Sub "${AWS::StackName}-SSHSecurityGroupId" # exporta el una variable a rellenar "StackName", con el valor del GroupID que en este caso será SSHSecurityGroup ya que se le pasa por referencia en el value
+  HTTPSecurityGroupId:
+    Description: ID grupo de seguridad HTTP
+    Value: !Ref HTTPSecurityGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-HTTPSecurityGroupId"
+  TomcatSecurityGroupId:
+    Description: ID grupo de seguridad Tomcat
+    Value: !Ref TomcatSecurityGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-TomcatSecurityGroupId"
+  MySQLSecurityGroupId:
+    Description: ID grupo de seguridad MySQL
+    Value: !Ref MySQLSecurityGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-MySQLSecurityGroupId"
